@@ -36,17 +36,22 @@ func ExampleBetween() {
 	// false
 }
 
-func addEvents() {
+func addEvents(s *Stage) {
 	in5sec := time.Now().Add(5 * time.Second)
 	in15sec := time.Now().Add(15 * time.Second)
+	in0sec := time.Now()
 
 	// Create two new events
-	AddEvent(NewEvent(in5sec, 2*time.Second, func() {
+	s.AddEvent(NewEvent(in5sec, 200*time.Millisecond, func() {
 		fmt.Println("This event happens after 5 seconds, within a 2 second window")
 	}))
-	AddEvent(NewEvent(in15sec, 200*time.Millisecond, func() {
+	s.AddEvent(NewEvent(in15sec, 2*time.Second, func() {
 		fmt.Println("This event happens after 15 seconds, within a 200 millisecond window")
 	}))
+	s.AddEvent(NewReEvent(in0sec, 30*time.Second, 3*time.Second, func() {
+		fmt.Println("This event happens every 3 seconds, within a 30 second window")
+	}))
+
 }
 
 //func addTransitions() {
@@ -63,9 +68,10 @@ func addEvents() {
 //}
 
 func TestEventLoop(t *testing.T) {
-	addEvents()
+	s := NewStage()
+	addEvents(s)
 	//addTransitions()
 	fmt.Println("Running the event loop for 40 seconds")
-	go EventLoop()
+	go s.EventLoop()
 	time.Sleep(40 * time.Second)
 }
