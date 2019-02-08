@@ -33,7 +33,7 @@ func ProgressWrapper(from, upto time.Time, progressFunction func(float64)) func(
 
 // ProgressWrapperInterval behaves like ProgressWrapper, except that an
 // interval is given, that lets the function receive a "1.0" value at the
-// final run, when progress is complete. The interval duration is substracted
+// final run, when progress is complete. The interval duration is subtracted
 // from the `upto` time, at the time when the progress float is calculated.
 func ProgressWrapperInterval(from, upto time.Time, interval time.Duration, progressFunction func(float64)) func() {
 	start := time.Now()
