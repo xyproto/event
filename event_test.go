@@ -36,8 +36,8 @@ func ExampleBetween() {
 	// false
 }
 
-func createEvents() *Events {
-	events := NewEvents()
+func createEvents() *EventLoop {
+	events := NewEventLoop()
 
 	in0sec := time.Now()
 
@@ -73,11 +73,11 @@ func createEvents() *Events {
 }
 
 func TestEventLoop(t *testing.T) {
-	events := createEvents()
+	eventloop := createEvents()
 
 	// TODO: Find the smallest cooldown and use that as the event loop delay
 	fmt.Println("Run the event loop for 30s, with a loop delay of 50ms")
-	go events.Loop(50 * time.Millisecond)
+	go eventloop.Go(50 * time.Millisecond)
 
 	// Wait 30 seconds before returning
 	time.Sleep(30 * time.Second)
