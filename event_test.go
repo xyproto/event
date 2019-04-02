@@ -2,6 +2,7 @@ package event
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -59,6 +60,58 @@ func ExampleBetweenClock() {
 	// true
 }
 
+// dFmt formats a duration nicely
+func dFmt(d time.Duration) string {
+	s := fmt.Sprintf("%6s", d)
+	if strings.Contains(s, ".") {
+		pos := strings.Index(s, ".")
+		if strings.Contains(s[pos:], "s") {
+			s = s[:pos] + "s"
+		}
+	}
+	if strings.HasSuffix(s, "m0s") {
+		s = s[:len(s)-2]
+	}
+	if strings.HasSuffix(s, "h0m") {
+		s = s[:len(s)-2]
+	}
+	return strings.TrimSpace(s)
+}
+
+func ExampleBetweenClockDay() {
+	now := time.Now()
+
+	noon := time.Date(now.Year(), now.Month(), now.Day(), 12, 0, 0, 0, now.Location())
+	two := time.Date(now.Year(), now.Month(), now.Day(), 14, 0, 0, 0, now.Location())
+
+	h1 := time.Hour * 1
+	fmt.Println("one hour:", dFmt(h1))
+
+	e := &Event{from: noon, upTo: two, cooldown: h1, clockOnly: true}
+	fmt.Println("two hours:", dFmt(e.Duration()))
+
+	// Output:
+	// one hour: 1h
+	// two hours: 1h59m59s
+}
+
+func ExampleBetweenClockDayBackwards() {
+	now := time.Now()
+
+	noon := time.Date(now.Year(), now.Month(), now.Day(), 14, 0, 0, 0, now.Location())
+	two := time.Date(now.Year(), now.Month(), now.Day(), 12, 0, 0, 0, now.Location())
+
+	h1 := time.Hour * 1
+	fmt.Println("one hour:", dFmt(h1))
+
+	e := &Event{from: noon, upTo: two, cooldown: h1, clockOnly: true}
+	fmt.Println("twenty two hours:", dFmt(e.Duration()))
+
+	// Output:
+	// one hour: 1h
+	// twenty two hours: 21h59m59s
+}
+
 func ExampleBetweenClockMidnight() {
 	now := time.Now()
 
@@ -69,12 +122,12 @@ func ExampleBetweenClockMidnight() {
 	afterMidnight := time.Date(now.Year(), now.Month(), now.Day(), 1, 0, 0, 0, now.Location())
 
 	h1 := time.Hour * 1
-	fmt.Println("one hour", h1)
+	fmt.Println("one hour:", dFmt(h1))
 
 	e := &Event{from: beforeMidnight, upTo: afterMidnight, cooldown: h1, clockOnly: true}
-	fmt.Println("two hours:", e.Duration())
+	fmt.Println("two hours:", dFmt(e.Duration()))
 
 	// Output:
-	// one hour: 1h0m0s
-	// two hours: 2h0m0s
+	// one hour: 1h
+	// two hours: 1h59m59s
 }
