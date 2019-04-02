@@ -58,3 +58,23 @@ func ExampleBetweenClock() {
 	// true
 	// true
 }
+
+func ExampleBetweenClockMidnight() {
+	now := time.Now()
+
+	// One hour before midnight, the date does not matter
+	beforeMidnight := time.Date(now.Year(), now.Month(), now.Day(), 23, 0, 0, 0, now.Location())
+
+	// One hour after midnight, the date does not matter
+	afterMidnight := time.Date(now.Year(), now.Month(), now.Day(), 1, 0, 0, 0, now.Location())
+
+	h1 := time.Hour * 1
+	fmt.Println("one hour", h1)
+
+	e := &Event{from: beforeMidnight, upTo: afterMidnight, cooldown: h1, clockOnly: true}
+	fmt.Println("two hours:", e.Duration())
+
+	// Output:
+	// one hour: 1h0m0s
+	// two hours: 2h0m0s
+}
