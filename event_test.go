@@ -50,13 +50,13 @@ func ExampleBetweenClock() {
 
 	fmt.Println(Between(in2secNextYear, start, in4sec))
 	fmt.Println(Between(in2secToday, start, in4sec))
-	fmt.Println(BetweenClock(in2secNextYear, start, in4sec))
-	fmt.Println(BetweenClock(in2secToday, start, in4sec))
+	fmt.Println(Between(in2secNextYear, start, in4sec))
+	fmt.Println(Between(in2secToday, start, in4sec))
 
 	// Output:
 	// false
 	// true
-	// true
+	// false
 	// true
 }
 
