@@ -36,7 +36,7 @@ func ExampleBetween() {
 	// false
 }
 
-func ExampleBetweenClock() {
+func ExampleBetween_clock() {
 	now := time.Now()
 	in2secToday := time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second()+2, now.Nanosecond(), now.Location())
 	in2secNextYear := time.Date(now.Year()+1, now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second()+2, now.Nanosecond(), now.Location())
@@ -78,7 +78,8 @@ func dFmt(d time.Duration) string {
 	return strings.TrimSpace(s)
 }
 
-func ExampleBetweenClockDay() {
+func ExampleBetween_clockDay() {
+
 	now := time.Now()
 
 	noon := time.Date(now.Year(), now.Month(), now.Day(), 12, 0, 0, 0, now.Location())
@@ -95,7 +96,7 @@ func ExampleBetweenClockDay() {
 	// two hours: 1h59m59s
 }
 
-func ExampleBetweenClockDayBackwards() {
+func ExampleBetween_clockDayBackwards() {
 	now := time.Now()
 
 	noon := time.Date(now.Year(), now.Month(), now.Day(), 14, 0, 0, 0, now.Location())
@@ -112,7 +113,7 @@ func ExampleBetweenClockDayBackwards() {
 	// twenty two hours: 21h59m59s
 }
 
-func ExampleBetweenClockMidnight() {
+func ExampleBetween_clockMidnight() {
 	now := time.Now()
 
 	// One hour before midnight, the date does not matter
