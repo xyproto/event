@@ -2,6 +2,7 @@ package event
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 	"time"
 )
@@ -32,12 +33,21 @@ func fillEvents() *Loop {
 	})))
 
 	// Add one-time events for the time markers
+	fs := make([]func(), 5, 5)
+	counter := 0
 	for i := 0; i < 40; i += 10 {
 		// Needed for the integer i to be enclosed correctly in the closure below
 		seconds := i
-		events.Once(in0sec.Add(time.Duration(seconds)*time.Second), func() {
-			fmt.Printf("--- %d second mark ---\n", seconds)
-		})
+		fs[counter] = func(seconds, i int) func() {
+			return func() {
+				fmt.Printf("--- %d second mark, i: %d ---\n", seconds, i)
+			}
+		}(seconds, i)
+		f := fs[counter]
+		var ptr uintptr = reflect.ValueOf(f).Pointer()
+		fmt.Printf("registered function %T %v\n", f, ptr)
+		events.Once(in0sec.Add(time.Duration(seconds)*time.Second), f)
+		counter++
 	}
 
 	return events
